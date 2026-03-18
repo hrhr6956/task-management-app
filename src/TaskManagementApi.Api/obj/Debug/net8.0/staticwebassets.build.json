@@ -1,1 +1,11 @@
-{"Version":1,"Hash":"vvrqGRqh5+DSu52Z1TkwVHuQxaMxftcLNgZSZ0OLD6Y=","Source":"TaskManagementApi.Api","BasePath":"/","Mode":"Root","ManifestType":"Build","ReferencedProjectsConfiguration":[],"DiscoveryPatterns":[],"Assets":[],"Endpoints":[]}
+{
+  "Version": 1,
+  "Hash": "2T0RcpIZllz8mvHPSTfHLNWh/WoxmEvIUTJPn4QmuXM=",
+  "Source": "TaskManagementApi.Api",
+  "BasePath": "_content/TaskManagementApi.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

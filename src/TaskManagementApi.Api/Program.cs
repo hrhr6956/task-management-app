@@ -14,7 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 //  services 
 builder.Services.AddControllers()
-    .AddJsonOptions(options => {
+    .AddJsonOptions(options =>
+    {
         options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
     });
 builder.Services.AddEndpointsApiExplorer();
@@ -51,21 +52,25 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 // Register DbContext with SQLite
-if (builder.Environment.IsProduction()) {
+if (builder.Environment.IsProduction())
+{
     // In production, get the database path from environment variable
     var dbPath = Environment.GetEnvironmentVariable("SQLITE_DB_PATH") ?? "TaskManagement.db";
     var connectionString = $"Data Source={dbPath}";
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlite(connectionString));
 }
-else {
+else
+{
     // Development: use connection string from appsettings.Development.json
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 }
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options => {
-        options.TokenValidationParameters = new TokenValidationParameters {
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
@@ -93,11 +98,13 @@ builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 // builder.Services.AddScoped<IRepository, Repository<>>(); // Generic repository for common operations
 
 // Add CORS
-builder.Services.AddCors(options => {
+builder.Services.AddCors(options =>
+{
     options.AddPolicy("AllowFrontend",
-        policy => {
+        policy =>
+        {
             policy.WithOrigins("http://localhost:5173",
-                                "https://your-frontend.vercel.app"
+                                "https://task-management-ui.vercel.app"
                         )
                   .AllowAnyHeader()
                   .AllowAnyMethod()
@@ -108,11 +115,10 @@ builder.Services.AddCors(options => {
 
 var app = builder.Build();
 
-// for swagger ----> Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// for swagger 
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
@@ -121,7 +127,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-using (var scope = app.Services.CreateScope()) {
+using (var scope = app.Services.CreateScope())
+{
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
 }
