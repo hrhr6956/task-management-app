@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5276/api",
+  baseURL: import.meta.env.VITE_API_URL|| "http://localhost:5276/api",
 });
 
 API.interceptors.request.use((req) => {
@@ -14,7 +14,6 @@ API.interceptors.request.use((req) => {
 
 export const login = (data) => API.post("/auth/login", data);
 export const register = (data) => API.post("/auth/register", data);
-// export const getTasks = () => API.get('/tasks');
 export const getTasks = (params) => API.get("/tasks", { params });
 export const createTask = (data) => API.post("/tasks", data);
 export const updateTask = (id, data) => API.put(`/tasks/${id}`, data);
