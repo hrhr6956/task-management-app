@@ -50,8 +50,19 @@ builder.Services.AddSwaggerGen();
 // });
 builder.Services.AddScoped<IAuthService, AuthService>();
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Register DbContext with SQLite
+if (builder.Environment.IsProduction()) {
+    // In production, get the database path from environment variable
+    var dbPath = Environment.GetEnvironmentVariable("SQLITE_DB_PATH") ?? "TaskManagement.db";
+    var connectionString = $"Data Source={dbPath}";
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlite(connectionString));
+}
+else {
+    // Development: use connection string from appsettings.Development.json
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => {
         options.TokenValidationParameters = new TokenValidationParameters {
@@ -85,7 +96,9 @@ builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddCors(options => {
     options.AddPolicy("AllowFrontend",
         policy => {
-            policy.WithOrigins("http://localhost:5173") // your frontend URL
+            policy.WithOrigins("http://localhost:5173",
+                                "https://your-frontend.vercel.app"
+                        )
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials();
