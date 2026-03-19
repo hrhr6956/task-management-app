@@ -104,7 +104,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins("http://localhost:5173",
-                                "https://task-management-ui.vercel.app"
+                                "https://task-management-app-delta-rose.vercel.app"
                         )
                   .AllowAnyHeader()
                   .AllowAnyMethod()
